@@ -8,45 +8,74 @@
 
 namespace CheckMines {
 
-int ConditionalOpenSquare(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
-    bool state_open = field[x][y]->is_open;
-    size_t number_of_neighbours = field[x][y]->number_of_neighbours;
+static bool OpenSquare(Square ***field, size_t x, size_t y, size_t *opened) {
+    assert(field);
+    assert(opened);
 
-    if (state_open) {
-        return 0;
+    if (field[x][y]->is_open) {
+        return false;
     }
+    field[x][y]->is_open = true;
+    (*opened)++;
 
-    if (number_of_neighbours == 0) {
-        return OpenNeighbours(field, x, y, number_of_opened_neighbours);
-    }
-
-    return 0;
+    return true;
 }
 
-LogicsExitCodes OpenNeighbours(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
+void ConditionalOpenSquare(Square ***field, size_t x, size_t y, size_t *opened_neighbours) {
+    assert(field);
+    assert(opened_neighbours);
+
+    if (!OpenSquare(field, x, y, opened_neighbours)) {
+        return;
+    }
+
+    if (field[x][y]->number_of_neighbours == 0) {
+        OpenNeighbours(field, x, y, opened_neighbours);
+    }
+}
+
+void OpenNeighbours(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
+    assert(field);
+    assert(number_of_opened_neighbours);
+
+    for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -1; dy <= 1; dy++) {
+            if (dx == 0 && dy == 0) {
+                continue;
+            }
+
+            long n_x = (long)x + dx;
+            long n_y = (long)y + dy;
+            if (n_x < 0 || n_x >= (long)X_COORD) {
+                continue;
+            }
+            if (n_y < 0 || n_y >= (long)Y_COORD) {
+                continue;
+            }
+
+            ConditionalOpenSquare(field, (size_t)n_x, (size_t)n_y, number_of_opened_neighbours);
+        }
+    }
+}
+
+LogicsExitCodes CheckMines(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
     assert(field);
     assert(number_of_opened_neighbours);
 
     field[x][y]->is_open = true;
 
-    (*number_of_opened_neighbours)++;
-    if (*number_of_opened_neighbours == x_coord * y_coord) return kSuccessWin;
-
-    if (x > 0) *number_of_opened_neighbours += ConditionalOpenSquare(field, x - 1, y, number_of_opened_neighbours);
-    if (x + 1 < x_coord) *number_of_opened_neighbours += ConditionalOpenSquare(field, x + 1, y, number_of_opened_neighbours);
-    if (y > 0) *number_of_opened_neighbours += ConditionalOpenSquare(field, x, y - 1, number_of_opened_neighbours);
-    if (y + 1 < y_coord) *number_of_opened_neighbours += ConditionalOpenSquare(field, x, y + 1, number_of_opened_neighbours);
-
-    return kSuccessWin;
-}
-
-LogicsExitCodes CheckMines(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
     if (field[x][y]->is_mine) {
         std::cout << "Mine opened. You failed :(\n";
         return kFail;
     }
 
-    return OpenNeighbours(field, x, y, number_of_opened_neighbours);
+    ConditionalOpenSquare(field, x, y, number_of_opened_neighbours);
+
+    if (*number_of_opened_neighbours == X_COORD * Y_COORD) {
+        return kSuccessWin;
+    }
+
+    return kSuccessContinue;
 }
 
 } // CheckMines

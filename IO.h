@@ -6,6 +6,7 @@
 namespace IO {
 
 Logics::LogicsOptions GetOption(void);
+void ClearBuffer();
 
 } // IO
 

@@ -12,7 +12,7 @@ namespace CheckMines {
         kClosed,
     } StatesForOpen;
 
-    LogicsExitCodes OpenNeighbours(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours);
+    void OpenNeighbours(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours);
     LogicsExitCodes CheckMines(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours);
 } // CheckMines
 

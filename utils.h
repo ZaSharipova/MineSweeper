@@ -16,16 +16,17 @@ enum PoolState {
     kOpenedByRecursion,
 };
 
-#define x_coord 30
-#define y_coord 16
-#define number_of_mines 3
+#define X_COORD 10
+#define Y_COORD 10
+#define number_of_mines 5
 
 Square ***CreateField(void);
 void DeleteField(Square ***field);
-void DumpPool();
+void DumpPool(Square ***field);
 
 enum LogicsExitCodes {
     kSuccessStop,
+    kSuccessContinue,
     kSuccessWin,
     kFail,
 };

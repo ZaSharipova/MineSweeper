@@ -13,7 +13,7 @@ LogicsExitCodes HandleLogics(Square ***field) {
     assert(field);
 
     //static size_t counter_of_mines_opened = 0;
-    static size_t field_size = x_coord * y_coord;
+    static size_t field_size = X_COORD * Y_COORD;
     static size_t number_of_opened_squares = 0;
 
     if (number_of_opened_squares + number_of_mines == field_size) {
@@ -25,9 +25,15 @@ LogicsExitCodes HandleLogics(Square ***field) {
     switch(option) {
         case kOpen: {
             size_t x = 0, y = 0;
+            printf("Введите координаты по x, y через пробел:\n");
             scanf("%zu %zu", &x, &y);
+            IO::ClearBuffer();
             LogicsExitCodes error_status = CheckMines::CheckMines(field, x, y, &number_of_opened_squares);
-            if (error_status == kFail) return kFail;
+            DumpPool(field);
+            printf("------------------\n");
+            if (error_status == kFail) {
+                return kFail;
+            }
             return HandleLogics(field);
         }
 

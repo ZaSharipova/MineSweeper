@@ -6,11 +6,15 @@
 
 int main() {
     Square ***field = CreateField();
-    Mines::LayMines(field);
+    for (size_t counter = 0; counter < number_of_mines; counter ++) {
+        Mines::LayMines(field);
+    }
+
     Mines::CountMines(field);
 
     LogicsExitCodes error_status = Logics::HandleLogics(field);
 
+    //DumpPool(field);
     DeleteField(field);
 
     return error_status;
