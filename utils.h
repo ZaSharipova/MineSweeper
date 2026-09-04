@@ -17,18 +17,22 @@ enum LogicsExitCodes {
 };
 
 struct Square {
-    size_t number_of_neighbours;
-    bool is_mine;
-    bool is_open;
-    bool opened_by_user; // used only when already opened
+    size_t number_of_neighbours = 0;
+    bool is_mine = false;
+    bool is_open = false;
+    bool opened_by_user = false; // used only when already opened
 };
+
+#define X_COORD 10
+#define Y_COORD 10
+#define number_of_mines 5
 
 class Field {
 public:
     //... for coords
 
     Field();
-    ~Field();
+    ~Field() = default;
 
     Field(const Field&) = delete;
     Field &operator=(const Field &) = delete;
@@ -39,12 +43,12 @@ public:
     const Square &At(size_t x, size_t y) const;
 
 private:
-    Square ***field_;
-};
+    std::vector<std::vector<Square>> field_;
 
-#define X_COORD 10
-#define Y_COORD 10
-#define number_of_mines 5
+    size_t Index(size_t x, size_t y) {
+        return x * Y_COORD + y;
+    }
+};
 
 // Square ***CreateField(void);
 // void DeleteField(Square ***field);
