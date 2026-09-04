@@ -8,20 +8,20 @@
 
 namespace CheckMines {
 
-static bool OpenSquare(Square ***field, size_t x, size_t y, size_t *opened) {
+static bool OpenSquare(Field *field, size_t x, size_t y, size_t *opened) {
     assert(field);
     assert(opened);
 
-    if (field[x][y]->is_open) {
+    if (field->At(x, y).is_open) {
         return false;
     }
-    field[x][y]->is_open = true;
+    field->At(x, y).is_open = true;
     (*opened)++;
 
     return true;
 }
 
-void ConditionalOpenSquare(Square ***field, size_t x, size_t y, size_t *opened_neighbours) {
+void ConditionalOpenSquare(Field *field, size_t x, size_t y, size_t *opened_neighbours) {
     assert(field);
     assert(opened_neighbours);
 
@@ -29,12 +29,12 @@ void ConditionalOpenSquare(Square ***field, size_t x, size_t y, size_t *opened_n
         return;
     }
 
-    if (field[x][y]->number_of_neighbours == 0) {
+    if (field->At(x, y).number_of_neighbours == 0) {
         OpenNeighbours(field, x, y, opened_neighbours);
     }
 }
 
-void OpenNeighbours(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
+void OpenNeighbours(Field *field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
     assert(field);
     assert(number_of_opened_neighbours);
 
@@ -58,13 +58,13 @@ void OpenNeighbours(Square ***field, size_t x, size_t y, size_t *number_of_opene
     }
 }
 
-LogicsExitCodes CheckMines(Square ***field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
+LogicsExitCodes CheckMines(Field *field, size_t x, size_t y, size_t *number_of_opened_neighbours) {
     assert(field);
     assert(number_of_opened_neighbours);
 
-    field[x][y]->is_open = true;
+    field->At(x, y).is_open = true;
 
-    if (field[x][y]->is_mine) {
+    if (field->At(x, y).is_mine) {
         std::cout << "Mine opened. You failed :(\n";
         return kFail;
     }

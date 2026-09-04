@@ -3,26 +3,11 @@
 
 #include <iostream>
 
-struct Square {
-    size_t number_of_neighbours;
-    bool is_mine;
-    bool is_open;
-    bool opened_by_user; // used only when already opened
-};
-
 enum PoolState {
     kClosed,
     kOpenedByUser,
     kOpenedByRecursion,
 };
-
-#define X_COORD 10
-#define Y_COORD 10
-#define number_of_mines 5
-
-Square ***CreateField(void);
-void DeleteField(Square ***field);
-void DumpPool(Square ***field);
 
 enum LogicsExitCodes {
     kSuccessStop,
@@ -30,5 +15,39 @@ enum LogicsExitCodes {
     kSuccessWin,
     kFail,
 };
+
+struct Square {
+    size_t number_of_neighbours;
+    bool is_mine;
+    bool is_open;
+    bool opened_by_user; // used only when already opened
+};
+
+class Field {
+public:
+    //... for coords
+
+    Field();
+    ~Field();
+
+    Field(const Field&) = delete;
+    Field &operator=(const Field &) = delete;
+
+    void Dump() const;
+
+    Square &At(size_t x, size_t y);
+    const Square &At(size_t x, size_t y) const;
+
+private:
+    Square ***field_;
+};
+
+#define X_COORD 10
+#define Y_COORD 10
+#define number_of_mines 5
+
+// Square ***CreateField(void);
+// void DeleteField(Square ***field);
+// void DumpPool(Square ***field);
 
 #endif // UTILS_H_

@@ -11,7 +11,7 @@ enum LogicsOptions {
     kStop,
 };
 
-LogicsExitCodes HandleLogics(Square ***field);
+LogicsExitCodes HandleLogics(Field *field);
 
 } // LOGICS
 

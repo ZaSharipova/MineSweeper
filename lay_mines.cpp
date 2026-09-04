@@ -6,20 +6,20 @@
 #include "utils.h"
 
 namespace Mines {
-void LayMines(Square ***field) {
+void LayMines(Field *field) {
     int x = rand() % X_COORD, y = rand() % Y_COORD;
     do {
         x = rand() % X_COORD;
         y = rand() % Y_COORD;
-    } while (field[x][y]->is_mine);
+    } while (field->At(x, y).is_mine);
 
-    field[x][y]->is_mine = true;
+    field->At(x, y).is_mine = true;
 }
 
-void CountMines(Square ***field) {
+void CountMines(Field *field) {
     for (size_t x = 0; x < X_COORD; x++) {
         for (size_t y = 0; y < Y_COORD; y++) {
-            if (field[x][y]->is_mine) {
+            if (field->At(x, y).is_mine) {
                 continue;
             }
             int count = 0;
@@ -38,10 +38,10 @@ void CountMines(Square ***field) {
                         continue;
                     }
 
-                    count += field[n_x][n_y]->is_mine ? 1 : 0;
+                    count += field->At(n_x, n_y).is_mine ? 1 : 0;
                 }
             }
-            field[x][y]->number_of_neighbours = count;
+            field->At(x, y).number_of_neighbours = count;
         }
     }
 }

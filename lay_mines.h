@@ -8,8 +8,8 @@
 
 namespace Mines {
 
-void LayMines(Square ***field);
-void CountMines(Square ***field);
+void LayMines(Field *field);
+void CountMines(Field *field);
 
 } // Mines
 

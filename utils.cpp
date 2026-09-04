@@ -2,78 +2,73 @@
 
 #include <iostream>
 #include <cassert>
+#include <cstdlib>
 
-// namespace Utils {
+namespace {
+    constexpr const char *kReset = "\033[0m";
+    constexpr const char *kRed = "\033[1;31m";
+    constexpr const char *kYellow = "\033[1;33m";
+    constexpr const char *kWhite = "\033[1;37m";
+} // namespace
 
-Square ***CreateField(void) {
-    Square ***field = (Square ***) calloc (X_COORD, sizeof(Square **));
+Field::Field() {
+    field_ = static_cast<Square ***>(calloc (X_COORD, sizeof(Square **)));
 
     for (size_t x = 0; x < X_COORD; x++) {
-        field[x] = (Square **) calloc (Y_COORD, sizeof(Square *));
+        field_[x] = static_cast<Square **>(calloc (Y_COORD, sizeof(Square *)));
 
         for (size_t y = 0; y < Y_COORD; y++) {
-            Square *sq = (Square *) calloc (1, sizeof(Square));
+            Square *sq = static_cast<Square *>(calloc (1, sizeof(Square)));
             sq->is_mine = false;
             sq->is_open = false;
             sq->opened_by_user = false;
             sq->number_of_neighbours = 0;
-            field[x][y] = sq;
+            field_[x][y] = sq;
         }
     }
-
-    return field;
 }
 
-void DeleteField(Square ***field) {
-    assert(field);
+Field::~Field() {
+    assert(field_);
 
     for (size_t x = 0; x < X_COORD; x++) {
         for (size_t y = 0; y < Y_COORD; y++) {
-            free(field[x][y]);
+            free(field_[x][y]);
         }
 
-        free(field[x]);
+        free(field_[x]);
     }
 
-    free(field);
+    free(field_);
 }
 
-#define RESET  "\033[0m"
-#define RED    "\033[1;31m"
-#define YELLOW "\033[1;33m"
-#define WHITE  "\033[1;37m"
+Square &Field::At(size_t x, size_t y) {
+    return *field_[x][y];
+}
 
-void DumpPool(Square ***field) {
+const Square &Field::At(size_t x, size_t y) const {
+    return *field_[x][y];
+}
+
+void Field::Dump() const {
     for (size_t x = 0; x < X_COORD; x++) {
         for (size_t y = 0; y < Y_COORD; y++) {
-            Square *field_pos = field[x][y];
+            Square *field_pos = field_[x][y];
             if (field_pos->is_open) {
-                //if (field_pos->opened_by_user) {
                     if (field_pos->is_mine) {
-                        printf(RED "X" RESET);
+                        std::cout << kRed << "X" << kReset;
                     } else {
-                        if (field_pos->number_of_neighbours > 0) printf(YELLOW "%zu" RESET, field[x][y]->number_of_neighbours);
-                        else printf(" ");
+                        if (field_pos->number_of_neighbours > 0) {
+                            std::cout << kYellow << field_[x][y]->number_of_neighbours << kReset;
+                        } else std::cout << " ";
                     }
-                // } else {
-                //     printf(" ");
-                // }
             } else {
-                printf("○");
+                std::cout << "○";
             }
-            // if (y % 2 == 1) {
-            //     std::cout << "..";
-            // } else {
-            //     std::cout << "|";
-            // }
         }
         std::cout << "\n";
     }
 }
-
-//void UpdateBuffer()
-
-// } // Utils
 
 // TODO dump logics (has to look perfect)
 // TODO buffer which will be only partially changed

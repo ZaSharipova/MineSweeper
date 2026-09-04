@@ -5,17 +5,14 @@
 #include "utils.h"
 
 int main() {
-    Square ***field = CreateField();
+    Field field;
     for (size_t counter = 0; counter < number_of_mines; counter ++) {
-        Mines::LayMines(field);
+        Mines::LayMines(&field);
     }
 
-    Mines::CountMines(field);
+    Mines::CountMines(&field);
 
-    LogicsExitCodes error_status = Logics::HandleLogics(field);
-
-    //DumpPool(field);
-    DeleteField(field);
+    LogicsExitCodes error_status = Logics::HandleLogics(&field);
 
     return error_status;
 }
