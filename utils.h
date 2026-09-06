@@ -45,6 +45,7 @@ public:
     Field &operator=(const Field &) = delete;
 
     void Dump() const;
+    void RevealMines();
 
     Square &At(size_t x, size_t y);
     const Square &At(size_t x, size_t y) const;

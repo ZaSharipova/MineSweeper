@@ -45,6 +45,16 @@ void Field::Dump() const {
     }
 }
 
+void Field::RevealMines() {
+    for (size_t x = 0; x < X_COORD; x++) {
+        for (size_t y = 0; y < Y_COORD; y++) {
+            if (At(x, y).is_mine) {
+                At(x, y).is_open = true;
+            }
+        }
+    }
+}
+
 void CycleMark(Square &sq) {
     if (sq.is_mine) {
         return;
