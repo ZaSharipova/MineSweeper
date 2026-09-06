@@ -5,14 +5,12 @@
 #include "utils.h"
 
 int main() {
-    Field field;
-    for (size_t counter = 0; counter < number_of_mines; counter ++) {
+    Field field {};
+    for (size_t counter = 0; counter < number_of_mines; counter++) {
         Mines::LayMines(&field);
     }
 
     Mines::CountMines(&field);
 
-    LogicsExitCodes error_status = Logics::HandleLogics(&field);
-
-    return error_status;
+   return Logics::HandleLogics(&field);
 }

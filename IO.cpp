@@ -1,4 +1,5 @@
 #include "IO.h"
+#include "main_logics.h"
 #include "utils.h"
 
 namespace IO {
@@ -8,24 +9,28 @@ void ClearBuffer() {
 }
 
 Logics::LogicsOptions GetOption(void) {
-    int option_index = 0;
 
-    printf("Введите, вы хотите открыть ячейку(o) или выйти(e):\n"
-        "(o/e)\n");
+    printf("Введите, вы хотите открыть ячейку(o), пометить ее(f) или выйти(e):\n"
+        "(o/e/f)\n");
 
     //ClearBuffer();
+    int option_index = 0;
     option_index = getchar();
-    printf("debug: [%c]\n", option_index);
     ClearBuffer();
 
-    if (option_index == 'o') {
-        return Logics::kOpen;
-    }
-    if (option_index == 'e') {
-        return Logics::kStop;
-    }
+    switch (option_index) {
+        case 'o':
+            return Logics::kOpen;
 
-    return Logics::kStop;
+        case 'e':
+            return Logics::kStop;
+
+        case 'f':
+            return Logics::kFlag;
+
+        default:
+            return Logics::kStop;
+    }
 }
 
 void AskForCoords(size_t *x, size_t *y) {
@@ -35,6 +40,10 @@ void AskForCoords(size_t *x, size_t *y) {
         scanf_counter = scanf("%zu %zu", x, y);
         ClearBuffer();
     } while (scanf_counter != 2);
+}
+
+void PrintSeparator() {
+    std::cout << "------------------\n";
 }
 
 } // IO

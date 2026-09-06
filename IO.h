@@ -7,6 +7,8 @@ namespace IO {
 
 Logics::LogicsOptions GetOption(void);
 void ClearBuffer();
+void AskForCoords(size_t *x, size_t *y);
+void PrintSeparator();
 
 } // IO
 

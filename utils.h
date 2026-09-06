@@ -16,11 +16,18 @@ enum LogicsExitCodes {
     kFail,
 };
 
+enum class Mark : uint8_t {
+    kNone,
+    kFlag,
+    kQuestion,
+};
+
 struct Square {
     size_t number_of_neighbours = 0;
     bool is_mine = false;
     bool is_open = false;
     bool opened_by_user = false; // used only when already opened
+    Mark mark = Mark::kNone;
 };
 
 #define X_COORD 10
@@ -45,10 +52,12 @@ public:
 private:
     std::vector<std::vector<Square>> field_;
 
-    size_t Index(size_t x, size_t y) {
+    size_t Index(size_t x, size_t y) { // NOTE it is unused!!!! Have to do smth with it
         return x * Y_COORD + y;
     }
 };
+
+void CycleMark(Square &sq);
 
 // Square ***CreateField(void);
 // void DeleteField(Square ***field);

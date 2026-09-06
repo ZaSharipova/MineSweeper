@@ -5,8 +5,12 @@
 
 #include "utils.h"
 
+#include <cassert>
+
 namespace Mines {
 void LayMines(Field *field) {
+    assert(field);
+
     int x = rand() % X_COORD, y = rand() % Y_COORD;
     do {
         x = rand() % X_COORD;
@@ -22,6 +26,7 @@ void CountMines(Field *field) {
             if (field->At(x, y).is_mine) {
                 continue;
             }
+
             int count = 0;
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
@@ -41,6 +46,7 @@ void CountMines(Field *field) {
                     count += field->At(n_x, n_y).is_mine ? 1 : 0;
                 }
             }
+
             field->At(x, y).number_of_neighbours = count;
         }
     }

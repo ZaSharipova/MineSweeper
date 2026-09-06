@@ -15,6 +15,7 @@ static bool OpenSquare(Field *field, size_t x, size_t y, size_t *opened) {
     if (field->At(x, y).is_open) {
         return false;
     }
+
     field->At(x, y).is_open = true;
     (*opened)++;
 
@@ -62,16 +63,19 @@ LogicsExitCodes CheckMines(Field *field, size_t x, size_t y, size_t *number_of_o
     assert(field);
     assert(number_of_opened_neighbours);
 
-    field->At(x, y).is_open = true;
+    if (field->At(x, y).mark == Mark::kFlag) {
+        return kSuccessContinue;
+    }
 
     if (field->At(x, y).is_mine) {
+        field->At(x, y).is_open = true;
         std::cout << "Mine opened. You failed :(\n";
         return kFail;
     }
 
     ConditionalOpenSquare(field, x, y, number_of_opened_neighbours);
 
-    if (*number_of_opened_neighbours == X_COORD * Y_COORD) {
+    if (*number_of_opened_neighbours == X_COORD * Y_COORD - number_of_mines) {
         return kSuccessWin;
     }
 

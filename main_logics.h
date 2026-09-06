@@ -8,6 +8,7 @@ namespace Logics {
 
 enum LogicsOptions {
     kOpen,
+    kFlag,
     kStop,
 };
 
